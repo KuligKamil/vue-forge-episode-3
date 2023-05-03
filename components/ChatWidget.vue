@@ -48,6 +48,7 @@ const usersTyping = ref<User[]>([]);
 // and in the empty function below
 
 async function handleNewMessage(message: Message) {
+  console.log(message)
   messages.value.push(message);
   usersTyping.value.push(bot.value);
   setTimeout(() => {
@@ -58,15 +59,12 @@ async function handleNewMessage(message: Message) {
       text: "Placeholder response until we implement the bot",
       userId: "assistant",
     });
+    console.log(messages)
+    //   const response = $fetch('/api/ai', {method: 'POST', body: message.text})
+    //   console.log(response)
   }, 3000);
 }
 </script>
 <template>
-  <ChatBox
-    :me="me"
-    :users="users"
-    :messages="messages"
-    @new-message="handleNewMessage"
-    :usersTyping="usersTyping"
-  />
+  <ChatBox :me="me" :users="users" :messages="messages" @new-message="handleNewMessage" :usersTyping="usersTyping" />
 </template>

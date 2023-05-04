@@ -28,7 +28,7 @@ const search = (text: string) => {
 }
 </script>
 <template>
-  <div class="fixed bottom-[10px] right-[10px] overflow-y-scroll">
+  <div class="fixed bottom-[10px] right-[10px]">
     <button v-show="!isOpen" class="bg-blue-500 p3 rounded " @click="isOpen = true">
       <!-- {{ isOpen }} -->
       <svg class="h-8 w-8 text-white" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"
@@ -38,16 +38,23 @@ const search = (text: string) => {
           stroke-linecap="round" stroke-linejoin="round"></path>
       </svg>
     </button>
-    <div v-show="isOpen" class="w-[450px] bg-info-content rounded">
+    <div v-show="isOpen" class="w-[450px] bg-info-content rounded ">
       <header>
         <div>
-          <button class="bg-white dark:bg-gray-900 py-5 px-4 rounded w-full" @click="isOpen = false">
+          <button class="bg-white dark:bg-gray-900 py-5 px-4 rounded w-full flex justify-between items-center"
+            @click="isOpen = false">
             Customer Support Chat
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+              <path fill="currentColor" d="m12 15.4l-6-6L7.4 8l4.6 4.6L16.6 8L18 9.4l-6 6Z" />
+            </svg>
+
           </button>
         </div>
       </header>
-      <div v-for="message in messages" :key="message.id" class="px-3 pt-2 overflow-hidden max-h-[80vh]">
-        <Message :message="message" :user="getUser(users, message.userId)" />
+      <div class="overflow-y-auto min-h-[40vh] max-h-[80vh]">
+        <div v-for="message in messages" :key="message.id" class="px-3 pt-2 ">
+          <Message :message="message" :user="getUser(users, message.userId)" />
+        </div>
       </div>
       <footer>
         <input v-model=inputText type="text" placeholder="Type you message"

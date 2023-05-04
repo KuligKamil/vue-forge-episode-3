@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Message, User } from '@/types'
 import { nanoid } from 'nanoid'
+import { nextTick } from 'vue'
+
 const props = defineProps<{
   messages: Message[]
   users: User[]
@@ -16,21 +18,52 @@ const getUser = (users: User[], id: string): User | undefined => {
   const user = users.find(user => user.id === id)
   return user
 }
-const search = (text: string) => {
+const search = async (text: string) => {
   inputText.value = ''
-  emit('newMessage', {
-    id: nanoid(),
-    userId: 'user',
-    createdAt: new Date(new Date().getTime()),
-    text: text,
+  await nextTick(() => {
+    emit('newMessage', {
+      id: nanoid(),
+      userId: 'user',
+      createdAt: new Date(new Date().getTime()),
+      text: text,
+    })
+
   })
-  console.log('search')
+}
+const messageBox = ref<HTMLElement>()
+watch(
+  () => props.messages.length,
+  async () => {
+    await nextTick()
+    if (messageBox.value) {
+      console.log(messageBox.value.scrollHeight)
+      messageBox.value.scrollTop = messageBox.value.scrollHeight
+    }
+  }
+)
+const isScrolling = ref(false)
+const handleScroll = (event: any) => {
+  if (messageBox.value) {
+    const scrollPosition = messageBox.value.scrollHeight - messageBox.value.clientHeight - messageBox.value.scrollTop
+    console.log()
+    console.log()
+    if (scrollPosition > 10) {
+      isScrolling.value = true
+    }
+    if (scrollPosition <= 10) {
+      isScrolling.value = false
+    }
+  }
+}
+const scrollDown = () => {
+  if (messageBox.value) {
+    messageBox.value.scrollTop = messageBox.value.scrollHeight
+  }
 }
 </script>
 <template>
   <div class="fixed bottom-[10px] right-[10px]">
-    <button v-show="!isOpen" class="bg-blue-500 p3 rounded " @click="isOpen = true">
-      <!-- {{ isOpen }} -->
+    <button v-show="!isOpen" class="bg-blue-500 p-2 rounded-full" @click="isOpen = true">
       <svg class="h-8 w-8 text-white" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"
         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -44,23 +77,23 @@ const search = (text: string) => {
           <button class="bg-white dark:bg-gray-900 py-5 px-4 rounded w-full flex justify-between items-center"
             @click="isOpen = false">
             Customer Support Chat
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-              <path fill="currentColor" d="m12 15.4l-6-6L7.4 8l4.6 4.6L16.6 8L18 9.4l-6 6Z" />
-            </svg>
-
+            <DownArrow class="h-[32px] w-[32px]"></DownArrow>
           </button>
         </div>
       </header>
-      <div class="overflow-y-auto min-h-[40vh] max-h-[80vh]">
-        <div v-for="message in messages" :key="message.id" class="px-3 pt-2 ">
+      <div ref="messageBox" v-on:scroll.passive="handleScroll" class="overflow-y-auto min-h-[40vh] max-h-[80vh]">
+        <div v-for=" message  in  messages " :key="message.id" class="px-3 pt-2">
           <Message :message="message" :user="getUser(users, message.userId)" />
         </div>
       </div>
       <footer>
         <input v-model=inputText type="text" placeholder="Type you message"
-          class="input input-bordered w-[434px] my-4 mx-2" @keypress.enter="search(inputText)" />
+          class="input input-bordered w-[434px] my-4 mx-2" @keypress.enter.extract="search(inputText)" />
       </footer>
-
+      <button v-show="isScrolling" @click="scrollDown"
+        class="btn fixed bottom-[110px] right-[20px] dark:bg-gray-900 rounded-full">
+        <DownArrow class="h-8 w-8 text-white"></DownArrow>
+      </button>
     </div>
   </div>
 </template>

@@ -2,14 +2,17 @@
 import type { Message, User } from '@/types'
 // @ts-expect-error
 import Markdown from 'vue3-markdown-it'
+
 const props = defineProps<{
   message: Message
   user?: User
 }>()
-const isMe = (id: string): boolean => {
+
+const relativeTime = useTimeAgo(() => props.message.createdAt)
+
+function isMe(id: string): boolean {
   return id === 'user'
 }
-const relativeTime = useTimeAgo(() => props.message.createdAt)
 </script>
 <template>
   <!-- <div class="chat chat-start">

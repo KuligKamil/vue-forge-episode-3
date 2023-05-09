@@ -6,17 +6,17 @@ import Markdown from 'vue3-markdown-it'
 const props = defineProps<{
   text?: string
   createdAt?: Date
-  user?: User
+  user: User
 }>()
 
 const relativeTime = useTimeAgo(() => props?.createdAt)
 
-function isMe(id: string): boolean {
+function isHuman(id: string): boolean {
   return id === 'user'
 }
 </script>
 <template>
-  <div class="chat" :class="[isMe(user.id) ? 'chat-end' : 'chat-start']">
+  <div class="chat" :class="[isHuman(user.id) ? 'chat-end' : 'chat-start']">
     <div class="chat-image avatar">
       <div class="w-10 rounded-full">
         <img :src="user.avatar" />

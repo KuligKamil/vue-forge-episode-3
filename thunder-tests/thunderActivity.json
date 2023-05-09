@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "8e0b60ca-8bb8-4b54-9c90-df5efdcd06da",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:3000//api/ai",
+    "url": "localhost:3000//api/ai",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-05-08T21:55:28.641Z",
+    "modified": "2023-05-08T21:55:28.641Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  }
+]

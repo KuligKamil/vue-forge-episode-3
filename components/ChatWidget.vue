@@ -48,14 +48,9 @@ const usersTyping = ref<User[]>([]);
 // and in the empty function below
 
 async function handleNewMessage(message: Message) {
-  console.log(message)
-  // const response = await $fetch('/api/ai', { method: 'POST', body: message.text })
-
   messages.value.push(message);
   usersTyping.value.push(bot.value);
   const response = await $fetch('/api/ai', { method: 'POST', body: messages.value })
-  console.log(response)
-  // setTimeout(() => {
   usersTyping.value = [];
   messages.value.push({
     id: nanoid(),
@@ -63,10 +58,6 @@ async function handleNewMessage(message: Message) {
     text: response,
     userId: "assistant",
   });
-  console.log(messages)
-
-  // }, 5000);
-
 }
 </script>
 <template>

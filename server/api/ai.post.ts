@@ -1,17 +1,14 @@
 import { Configuration, OpenAIApi } from 'openai'
 
 
-const { OPENAI_API_KEY } = useRuntimeConfig();
-console.log(process.env.NUXT_OPENAI_API_KEY)
-const configuration = new Configuration({
-  apiKey: process.env.NUXT_OPENAI_API_KEY
-});
+const { OPENAI_API_KEY } = useRuntimeConfig()
+const configuration = new Configuration({ apiKey: OPENAI_API_KEY })
 const openai = new OpenAIApi(configuration)
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
   console.log(body)
-  const messages = body.map(({ userId, text }) => {
+  const body = await readBody(event)
+  const messages = body.map(({ userId, text }: { userId: string, text: string }) => {
     return {
       role: userId,
       content: text,

@@ -2,6 +2,7 @@
 import type { Message, User } from '@/types'
 import { nanoid } from 'nanoid'
 import { nextTick } from 'vue'
+// import { useDebounceFn } from "@vueuse/core"
 
 const props = defineProps<{
   messages: Message[]
@@ -24,30 +25,29 @@ watch(
   async () => {
     await nextTick()
     if (messageBox.value) {
-      console.log(messageBox.value.scrollHeight)
       messageBox.value.scrollTop = messageBox.value.scrollHeight
     }
   }
 )
 
-async function search(text: string) {
-  inputText.value = ''
-  await nextTick(() => {
-    emit('new-message', {
-      id: nanoid(),
-      userId: 'user',
-      createdAt: new Date(new Date().getTime()),
-      text: text,
-    })
-
+function search() {
+  // if (inputText.value && inputText.value.length > 1) {
+  emit('new-message', {
+    id: nanoid(),
+    userId: 'user',
+    createdAt: new Date(),
+    text: inputText.value,
   })
+  inputText.value = ''
+  // }
+
 }
 
-function getUser(users: User[], id: string): User | undefined {
-  return users.find(user => user.id === id)
+function getUser(users: User[], id: string): User {
+  return users.find(user => user.id === id)!
 }
 
-function handleScroll() {
+function downButtonVisibility() {
   if (messageBox.value) {
     const scrollPosition = messageBox.value.scrollHeight - messageBox.value.clientHeight - messageBox.value.scrollTop
     if (scrollPosition > 10) {
@@ -58,7 +58,7 @@ function handleScroll() {
   }
 }
 
-function scrollDown() {
+function scrollDown() { // TODO: debounce 500ms
   if (messageBox.value) { messageBox.value.scrollTop = messageBox.value.scrollHeight }
 }
 
@@ -78,7 +78,7 @@ function scrollDown() {
           </button>
         </div>
       </header>
-      <div ref="messageBox" @scroll.passive="handleScroll" class="overflow-y-auto min-h-[40vh] max-h-[80vh]">
+      <div ref="messageBox" @scroll.passive="downButtonVisibility" class="overflow-y-auto min-h-[40vh] max-h-[80vh]">
         <div v-for=" { text, createdAt, userId, id }  in  messages" :key="id" class="px-3 pt-2">
           <Message :text="text" :created-at="createdAt" :user="getUser(users, userId)" />
         </div>
@@ -87,7 +87,7 @@ function scrollDown() {
         </div>
       </div>
       <footer>
-        <input v-model="inputText" @keypress.enter.extract="search(inputText)" type="text" placeholder="Type you message"
+        <input v-model="inputText" @keypress.enter.exact="search" type="text" placeholder="Type you message"
           class="input input-bordered w-[434px] my-4 mx-2" />
       </footer>
 

@@ -11,3 +11,8 @@ export interface Message {
 }
 export type AsyncState = null | "loading" | "error" | "complete";
 export type SocialPlatforms = "twitter" | "facebook";
+
+export interface Payload {
+  url: string
+  temperature: number
+}

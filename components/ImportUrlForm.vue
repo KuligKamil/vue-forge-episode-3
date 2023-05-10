@@ -21,8 +21,8 @@ const props = defineProps<{
                     class="input input-bordered w-full rounded-none rounded-l" />
                 <button class="btn rounded-none rounded-r">GENERATE ANNOUNCEMENT</button>
             </div>
-            <input :value="temperature" type="range" min="0" max="1" step="0.1" class="range range-secondary" />
+            <!-- <input :value="temperature" type="range" min="0" max="1" step="0.1" class="range range-secondary" /> -->
         </div>
-        <!-- <input :value="temperature" type="range" min="0" max="1" step="0.1" class="range range-secondary" /> -->
+        <input :value="temperature" type="range" min="0" max="1" step="0.1" class="range range-secondary" />
     </div>
 </template>

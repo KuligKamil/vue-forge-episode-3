@@ -64,7 +64,6 @@ function scrollDown() { // TODO: debounce 500ms
 
 </script>
 <template>
-  {{ usersTyping }}
   <div class="fixed bottom-[10px] right-[10px]">
     <ChatButton v-show="!isOpen" @click="isOpen = true" class="bg-blue-500 p-2 rounded-full">
     </ChatButton>

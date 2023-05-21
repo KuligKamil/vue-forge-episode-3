@@ -6,7 +6,6 @@ const configuration = new Configuration({ apiKey: OPENAI_API_KEY })
 const openai = new OpenAIApi(configuration)
 
 export default defineEventHandler(async (event) => {
-  console.log(body)
   const body = await readBody(event)
   const messages = body.map(({ userId, text }: { userId: string, text: string }) => {
     return {

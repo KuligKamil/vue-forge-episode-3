@@ -11,8 +11,11 @@ const props = defineProps<{
             <!-- <p class="pt-4 px-2">{{ subtitle }}</p> -->
             <!-- <textarea> {{ subtitle }}</textarea> -->
             <textarea class="textarea mt-4" :placeholder="subtitle"></textarea>
-            <div class="card-actions justify-end">
-                <button class="btn btn-primary">POST</button>
+            <div>
+                <div class="card-actions justify-end">
+                    <button class="btn">REGENERATE</button>
+                    <button class="btn btn-primary">POST</button>
+                </div>
             </div>
         </div>
     </div>
